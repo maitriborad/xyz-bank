@@ -6,15 +6,17 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class BankTest extends BaseTest {
+    CustomersPage customersPage=new CustomersPage();
     HomePage homePage=new HomePage();
     AddCustomerPage addCustomerPage=new AddCustomerPage();
     OpenAccountPage openAccountPage=new OpenAccountPage();
     CustomerLoginPage customerLoginPage=new CustomerLoginPage();
     AccountPage accountPage=new AccountPage();
+    BankManagerLoginPage bankManagerLoginPage=new BankManagerLoginPage();
     @Test
     public void bankManagerShouldAddCustomerSuccessfully(){
         homePage.clickOnBankManagerLogin();
-        homePage.clickOnAddCustomerLoginTab();
+        bankManagerLoginPage.clickOnAddCustomerLoginTab();
         addCustomerPage.enterFirstName("Prime");
         addCustomerPage.enterLastName("Testing");
         addCustomerPage.enterPostcode("E13DS");
@@ -23,9 +25,9 @@ public class BankTest extends BaseTest {
     }
     @Test
     public void bankManagerShouldOpenAccountSuccessfully(){
-        addCustomerPage.clickOnHomeButton();
+        bankManagerLoginPage.clickOnHomeButton();
         homePage.clickOnBankManagerLogin();
-        homePage.clickOnOpenAccount();
+        bankManagerLoginPage.clickOnOpenAccount();
         openAccountPage.searchCustomer("Prime Testing");
         openAccountPage.selectCurrency("Pound");
         openAccountPage.clickOnProcessButton();
@@ -33,32 +35,32 @@ public class BankTest extends BaseTest {
     }
     @Test
     public void customerShouldLoginAndLogoutSuccessfully(){
-        addCustomerPage.clickOnHomeButton();
-        homePage.clickOnCustomerLogin();
+        bankManagerLoginPage.clickOnHomeButton();
+        bankManagerLoginPage.clickOnCustomerLogin();
         customerLoginPage.searchCustomer("Prime Testing");
         customerLoginPage.clickOnLogin();
-        customerLoginPage.verifyThatLogoutIsDisplayed();
-        customerLoginPage.clickOnLogoutButton();
+        customersPage.verifyThatLogoutIsDisplayed();
+        customersPage.clickOnLogoutButton();
         Assert.assertEquals(customerLoginPage.getYourNameText(),"Your Name :","Log out is not successful");
     }
     @Test
     public void customerShouldDepositMoneySuccessfully(){
-        addCustomerPage.clickOnHomeButton();
-        homePage.clickOnCustomerLogin();
+        bankManagerLoginPage.clickOnHomeButton();
+        bankManagerLoginPage.clickOnCustomerLogin();
         customerLoginPage.searchCustomer("Harry Potter");
         customerLoginPage.clickOnLogin();
-        accountPage.clickOnDeposit();
+        customersPage.clickOnDeposit();
         accountPage.enterAmount("100");
         accountPage.clickOnSubmitButton();
         Assert.assertEquals(accountPage.getMessage(),"Deposit Successful","Amount not deposited");
     }
     @Test
     public void customerShouldWithdrawMoneySuccessfully(){
-        addCustomerPage.clickOnHomeButton();
-        homePage.clickOnCustomerLogin();
+        bankManagerLoginPage.clickOnHomeButton();
+        bankManagerLoginPage.clickOnCustomerLogin();
         customerLoginPage.searchCustomer("Hermoine Granger");
         customerLoginPage.clickOnLogin();
-        accountPage.clickOnWithdraw();
+        customersPage.clickOnWithdraw();
         accountPage.enterAmount("50");
         accountPage.clickOnSubmitButton();
         Assert.assertEquals(accountPage.getMessage(),"Transaction successful","Amount not deposited");
